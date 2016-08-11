@@ -1,0 +1,10 @@
+/var/log/cpu-fan/cpu-fan.log {
+  su root
+  rotate 7
+  daily
+  compress
+  delaycompress
+  missingok
+  notifempty
+  create 666 root root
+}
