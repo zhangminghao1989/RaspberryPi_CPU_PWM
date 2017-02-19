@@ -62,7 +62,7 @@ while true
   fi
  
   #小于设置温度关闭风扇
-  if [ $fan -eq 0 ] ;then
+if [ $fan -eq 0 ] ;then
   pwm=0
   fi
   if [ $tmp -le $shutdown_temp ] && [ $MODE -eq 2 ] ;then
@@ -71,8 +71,8 @@ while true
   gpio mode 1 pwm
   gpio pwm 1 $pwm
   sleep 5
-    echo "`date` temp=$tmp pwm=$pwm MODE=$MODE CPU idle:`top -n 1|grep Cpu|awk '{print $8}'`% 小于设置温度关闭风扇 " >> $LOG
-  else
+  echo "`date` temp=$tmp pwm=$pwm MODE=$MODE CPU idle:`top -n 1|grep Cpu|awk '{print $8}'`% 小于设置温度关闭风扇 " >> $LOG
+else
 
   #检查MODE，为0时关闭风扇
   if [ $MODE -eq 0 ] ;then
@@ -83,8 +83,10 @@ while true
   #检查MODE，为1时持续开启风扇最高转速
   if [ $MODE -eq 1 ] ;then
   pwm=1023
+  fan=1
   fi
   fi
+
   gpio mode 1 pwm
   gpio pwm 1 $pwm
     
@@ -94,5 +96,5 @@ while true
   #每5秒钟检查一次温度
   sleep 5
 
-  fi
+fi
 done
