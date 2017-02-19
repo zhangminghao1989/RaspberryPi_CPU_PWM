@@ -1,31 +1,40 @@
 #!/bin/sh
 ### BEGIN INIT INFO
 # Provides:          cpu-fan
-# Required-Start:    $local_fs $remote_fs
-# Required-Stop:     $local_fs $remote_fs
+# Required-Start:    $all
+# Required-Stop:     $all
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
 # Short-Description: control cpu fan speed
 ### END INIT INFO
  
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 
 NAME=cpu-fan
 USER=pi
-CPUFAN=/usr/bin/$NAME
+DAEMON=/usr/bin/$NAME
 PIDFILE=/var/run/$NAME.pid
 CONF=/home/$USER/.cpu-fan.conf
 LOG=/var/log/cpu-fan/cpu-fan.log
 
+if [ ! -e "$CONF" ]  ; then
+touch $CONF
+chmod 666 $CONF
+echo "MODE=2" > $CONF
+echo "set_temp_min=35000" >> $CONF
+echo "shutdown_temp=34000" >> $CONF
+echo "set_temp_max=70000" >> $CONF
+fi
 
 ARGS="${CONF} ${LOG}"
-test -f $CPUFAN || exit 0
+test -f $DAEMON || exit 0
 . /lib/lsb/init-functions
 
 case "$1" in
 
 start)
 log_daemon_msg "Starting cpu-fan" "cpu-fan"
-start-stop-daemon -S -q -b -m -p $PIDFILE -c $USER -a $CPUFAN -- $ARGS
+start-stop-daemon -S -q -b -m -p $PIDFILE -c $USER -a $DAEMON -- $ARGS
 log_end_msg $?
 echo "`date` cpu-fan服务启动" >> $LOG
 ;;
@@ -39,13 +48,13 @@ echo "`date` cpu-fan服务停止" >> $LOG
 restart|reload|force-reload)
 log_daemon_msg "Restarting cpu-fan" "cpu-fan"
 start-stop-daemon -K -R 5 -q -p $PIDFILE
-start-stop-daemon -S -q -b -m -p $PIDFILE -c $USER -a $CPUFAN -- $ARGS
+start-stop-daemon -S -q -b -m -p $PIDFILE -c $USER -a $DAEMON -- $ARGS
 log_end_msg $?
 echo "`date` cpu-fan服务重启" >> $LOG
 ;;
 
 status)
-status_of_proc -p $PIDFILE $CPUFAN cpu-fan && exit 0 || exit $?
+status_of_proc -p $PIDFILE $DAEMON cpu-fan && exit 0 || exit $?
 ;;
 
 *)
