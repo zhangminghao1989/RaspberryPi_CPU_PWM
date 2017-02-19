@@ -16,20 +16,6 @@ PIDFILE=/var/run/$NAME.pid
 CONF=/home/$USER/.cpu-fan.conf
 LOG=/var/log/cpu-fan/cpu-fan.log
 
-if [ ! -e "$CONF" ] ; then
-touch $CONF
-chown $USER:$USER $CONF
-echo "#设置风扇默认运行模式，0为关闭，1为全速，2为自动，运行过程中可以直接修改此文件来生效" >> $CONF
-echo "MODE=2" >> $CONF
-echo "#设置开启风扇的最低温度" >> $CONF
-echo "set_temp_min=35000" >> $CONF
-echo "#设置关闭风扇的温度" >> $CONF
-echo "shutdown_temp=34000" >> $CONF
-echo "#设置风扇全速运行的温度" >> $CONF
-echo "set_temp_max=70000" >> $CONF
-fi
-
-
 
 ARGS="${CONF} ${LOG}"
 test -f $CPUFAN || exit 0
