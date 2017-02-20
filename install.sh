@@ -1,4 +1,4 @@
-sudo cp cpu_fan.sh /usr/bin/cpu-fan
+sudo cp cpu-fan.sh /usr/bin/cpu-fan
 sudo chmod 755 /usr/bin/cpu-fan
 sudo cp ./init.d/cpu-fan /etc/init.d/cpu-fan
 sudo chmod 755 /etc/init.d/cpu-fan
