@@ -57,7 +57,7 @@ while true
   if [ $tmp -gt $set_temp_min ] && [ $fan -eq 0 ] && [ $MODE -eq 2 ] ;then
   gpio pwm 1 1023
   fan=1
-  echo "`date` temp=$tmp pwm=1023 MODE=$MODE CPU idle:`procinfo | grep idle | awk '{print $4}'` 第一次超过设置温度全速开启风扇" >> $LOG
+  echo "`date` temp=$tmp pwm=1023 MODE=$MODE CPU idle=`procinfo | grep idle | awk '{for(i=1;i<=NF;i++) if($i ~ /%/)  print $i}'` 第一次超过设置温度全速开启风扇" >> $LOG
   sleep 1
   fi
  
@@ -71,7 +71,7 @@ if [ $fan -eq 0 ] ;then
   gpio mode 1 pwm
   gpio pwm 1 $pwm
   sleep 5
-  echo "`date` temp=$tmp pwm=$pwm MODE=$MODE CPU idle:`procinfo | grep idle | awk '{print $4}'` 小于设置温度关闭风扇 " >> $LOG
+  echo "`date` temp=$tmp pwm=$pwm MODE=$MODE CPU idle=`procinfo | grep idle | awk '{for(i=1;i<=NF;i++) if($i ~ /%/)  print $i}'` 小于设置温度关闭风扇 " >> $LOG
 else
 
   #检查MODE，为0时关闭风扇
@@ -91,7 +91,7 @@ else
   gpio pwm 1 $pwm
     
   #输出日志
-  echo "`date` temp=$tmp pwm=$pwm MODE=$MODE CPU idle=`procinfo | grep idle | awk '{print $4}'`" >> $LOG
+  echo "`date` temp=$tmp pwm=$pwm MODE=$MODE CPU idle=`procinfo | grep idle | awk '{for(i=1;i<=NF;i++) if($i ~ /%/)  print $i}'`" >> $LOG
 
   #每5秒钟检查一次温度
   sleep 5
