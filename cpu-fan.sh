@@ -103,7 +103,7 @@ else
     
   #输出日志
 
-  echo "`date` temp=$tmp pwm=$pwm MODE=$MODE CPU load=$load" 大于设置温度开启风扇>> $LOG
+  echo "`date` temp=$tmp pwm=$pwm MODE=$MODE CPU load=$load 大于设置温度持续开启风扇" >> $LOG
 
   #每5秒钟检查一次温度
   sleep 5
