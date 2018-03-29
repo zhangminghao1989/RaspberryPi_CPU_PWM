@@ -102,8 +102,12 @@ else
   gpio pwm 1 $pwm
     
   #输出日志
-
+if [ $pwm -eq 0 ] ;then
+  echo "`date` temp=$tmp pwm=$pwm MODE=$MODE CPU load=$load 小于设置温度关闭风扇 " >> $LOG
+else
   echo "`date` temp=$tmp pwm=$pwm MODE=$MODE CPU load=$load 大于设置温度持续开启风扇" >> $LOG
+fi
+
 loadavg=`cat /proc/loadavg`
 awk=`cat /proc/loadavg | awk '{print $0}'`
   echo "`date` $loadavg $awk load=$load "

@@ -10,9 +10,9 @@ chmod 777 $RUN
 #设置风扇默认运行模式，0为关闭，1为全速，2为自动，运行过程中可以直接修改/var/run/cpu-fan.run文件来生效
 echo "2" > $RUN
 #设置开启风扇的最低温度
-set_temp_min=35000
-#设置关闭风扇温度比最低温度小1度
-shutdown_temp=`expr $set_temp_min - 1000`
+set_temp_min=55000
+#设置关闭风扇温度比最低温度小5度
+shutdown_temp=`expr $set_temp_min - 5000`
 #设置风扇全速运行的温度
 set_temp_max=70000
 
@@ -82,8 +82,11 @@ else
   gpio pwm 1 $pwm
   
   #输出日志
-  echo "`date` temp=$tmp  pwm=$pwm MODE=$MODE CPU load=$load 大于设置温度持续开启风扇" >> $LOG
-
+if [ $pwm -eq 0 ] ;then
+  echo "`date` temp=$tmp pwm=$pwm MODE=$MODE CPU load=$load 小于设置温度关闭风扇 " >> $LOG
+else
+  echo "`date` temp=$tmp pwm=$pwm MODE=$MODE CPU load=$load 大于设置温度持续开启风扇" >> $LOG
+fi
   #每5秒钟检查一次温度
   sleep 5
 fi
