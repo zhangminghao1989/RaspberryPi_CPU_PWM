@@ -3,8 +3,19 @@
 
 #设置运行状态文件
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+
+if [ -n "$1" ] ;then
 CONF=$1
+else
+CONF=/home/pi/.cpu-fan.conf
+fi
+if [  -n "$2" ] ;then
 LOG=$2
+else
+LOG=/var/log/cpu-fan/cpu-fan.log
+fi
+
+load=`cat /proc/loadavg | awk '{print $1}'`
 
 #开机风扇全速运行
 #默认的pwm值范围是0~1023
@@ -57,7 +68,7 @@ while true
   if [ $tmp -gt $set_temp_min ] && [ $fan -eq 0 ] && [ $MODE -eq 2 ] ;then
   gpio pwm 1 1023
   fan=1
-  echo "`date` temp=$tmp pwm=1023 MODE=$MODE CPU idle=`procinfo | grep idle | awk '{for(i=1;i<=NF;i++) if($i ~ /%/)  print $i}'` 第一次超过设置温度全速开启风扇" >> $LOG
+  echo "`date` temp=$tmp pwm=1023 MODE=$MODE CPU load=$load 第一次超过设置温度全速开启风扇" >> $LOG
   sleep 1
   fi
  
@@ -71,7 +82,7 @@ if [ $fan -eq 0 ] ;then
   gpio mode 1 pwm
   gpio pwm 1 $pwm
   sleep 5
-  echo "`date` temp=$tmp pwm=$pwm MODE=$MODE CPU idle=`procinfo | grep idle | awk '{for(i=1;i<=NF;i++) if($i ~ /%/)  print $i}'` 小于设置温度关闭风扇 " >> $LOG
+  echo "`date` temp=$tmp pwm=$pwm MODE=$MODE CPU load=$load 小于设置温度关闭风扇 " >> $LOG
 else
 
   #检查MODE，为0时关闭风扇
@@ -91,7 +102,8 @@ else
   gpio pwm 1 $pwm
     
   #输出日志
-  echo "`date` temp=$tmp pwm=$pwm MODE=$MODE CPU idle=`procinfo | grep idle | awk '{for(i=1;i<=NF;i++) if($i ~ /%/)  print $i}'`" >> $LOG
+
+  echo "`date` temp=$tmp pwm=$pwm MODE=$MODE CPU load=$load" 大于设置温度开启风扇>> $LOG
 
   #每5秒钟检查一次温度
   sleep 5

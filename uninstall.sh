@@ -7,4 +7,4 @@ sudo rm -f /etc/logrotate.d/cpu-fan
 sudo rm -f /var/log/cpu-fan/cpu-fan.log
 sudo rm -f -r /var/log/cpu-fan
 rm -f ~/.cpu-fan.conf
-#sed -i '/sudo service cpu-fan start/'d ~/.profile
+sudo systemctl daemon-reload
