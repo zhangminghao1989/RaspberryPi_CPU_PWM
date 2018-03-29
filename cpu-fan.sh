@@ -15,7 +15,6 @@ else
 LOG=/var/log/cpu-fan/cpu-fan.log
 fi
 
-load=`cat /proc/loadavg | awk '{print $1}'`
 
 #开机风扇全速运行
 #默认的pwm值范围是0~1023
@@ -30,6 +29,7 @@ while true
   do
   #获取cpu温度
   tmp=`cat /sys/class/thermal/thermal_zone0/temp`
+  load=`cat /proc/loadavg | awk '{print $1}'`
 
   #读取配置
   while read line; do
@@ -104,7 +104,9 @@ else
   #输出日志
 
   echo "`date` temp=$tmp pwm=$pwm MODE=$MODE CPU load=$load 大于设置温度持续开启风扇" >> $LOG
-
+loadavg=`cat /proc/loadavg`
+awk=`cat /proc/loadavg | awk '{print $0}'`
+  echo "`date` $loadavg $awk load=$load "
   #每5秒钟检查一次温度
   sleep 5
 

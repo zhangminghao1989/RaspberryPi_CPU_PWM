@@ -4,7 +4,7 @@
 #设置运行状态文件
 LOG=/var/log/cpu-fan/cpu-fan.log
 RUN=/var/run/cpu-fan.run
-load=`cat /proc/loadavg | awk '{print $1}'`
+
 touch $RUN
 chmod 777 $RUN
 #设置风扇默认运行模式，0为关闭，1为全速，2为自动，运行过程中可以直接修改/var/run/cpu-fan.run文件来生效
@@ -29,6 +29,7 @@ while true
   do
   #获取cpu温度
   tmp=`cat /sys/class/thermal/thermal_zone0/temp`
+  load=`cat /proc/loadavg | awk '{print $1}'`
   MODE=`cat $RUN`
   
   #计算pwm值，从变量set_temp_min设置的温度开始开启风扇，最低转速50%
