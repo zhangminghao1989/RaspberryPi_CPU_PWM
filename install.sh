@@ -4,6 +4,7 @@ sudo chmod 755 /usr/bin/cpu-fan
 sudo cp -f ./init.d/cpu-fan /etc/init.d/cpu-fan
 sudo chmod 755 /etc/init.d/cpu-fan
 sudo cp -f ./logrotate.d/cpu-fan /etc/logrotate.d/cpu-fan
+sudo chmod 644 /etc/logrotate.d/cpu-fan
 if [ ! -d "/var/log/cpu-fan" ];then
 sudo mkdir /var/log/cpu-fan
 fi
