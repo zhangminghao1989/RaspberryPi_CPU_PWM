@@ -15,6 +15,6 @@ sudo chown root:root /var/log/cpu-fan/cpu-fan.log
 sudo chmod 666 /var/log/cpu-fan/cpu-fan.log
 cp -n .cpu-fan.conf ~/.cpu-fan.conf
 sudo systemctl daemon-reload
-sudo insserv cpu-fan
+sudo update-rc.d cpu-fan defaults
 sudo service cpu-fan start
 
